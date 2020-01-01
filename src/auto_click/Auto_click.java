@@ -2,6 +2,8 @@ package auto_click;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Robot;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -44,6 +47,11 @@ public class Auto_click extends JFrame {
 			t1=new Thread(new Runnable() {
 	            public void run() {
 	                try {
+	                	Point p;
+	                	HWND hWnd;
+	                	int midXWin,midYWin;
+	                	int[] rect = {0, 0, 0, 0};
+	                	
 	                	for(;;) {
 	                		Thread.sleep(4000);
 	                		if (!doing) {
@@ -52,18 +60,31 @@ public class Auto_click extends JFrame {
 	                		Robot robot = new Robot();
 	                		lisModel.add(0, java.time.LocalTime.now()+ " setFore 有道单词本 and keydown...");
 	                		
-	                	    HWND hWnd = dicProcess.FindWindow(null, "有道单词本"); 
+	                	    hWnd = dicProcess.FindWindow(null, "有道单词本"); 
 	            	        dicProcess.ShowWindow(hWnd, User32.SW_SHOW);  
 	            	        dicProcess.SetForegroundWindow(hWnd);  
-							robot.keyPress(KeyEvent.VK_RIGHT);
-							robot.delay(100);
-							Thread.sleep(2000);
-							hWnd = dicProcess.FindWindow(null, "有道单词本"); 
-	            	        dicProcess.ShowWindow(hWnd, User32.SW_SHOW);  
-	            	        dicProcess.SetForegroundWindow(hWnd);  
+	            	        p=MouseInfo.getPointerInfo().getLocation();
+	            	        System.out.println(p.x);
+	            	        System.out.println(p.y);
 	            	        
+							User32.instance.GetWindowRect(hWnd, rect);
+							midXWin=(rect[2]+rect[0])/2;
+							midYWin=(rect[3]+rect[1])/2;
+							robot.mouseMove(midXWin, midYWin);
+							robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+							robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+							robot.mouseMove(p.x, p.y);
+							robot.keyPress(KeyEvent.VK_RIGHT);
 							robot.keyPress(KeyEvent.VK_SPACE);
-							robot.delay(100);
+							System.out.println("0:"+rect[0]+",1:"+rect[1]+",2:"+rect[2]+",3:"+rect[3]);
+	            	        
+							//robot.delay(100);
+							//Thread.sleep(2000);
+							//hWnd = dicProcess.FindWindow(null, "有道单词本"); 
+	            	        //dicProcess.ShowWindow(hWnd, User32.SW_SHOW);  
+	            	        //dicProcess.SetForegroundWindow(hWnd);  
+							
+							//robot.delay(100);
 							System.out.println("Thread");
 	                	}
 	                } 
@@ -117,6 +138,9 @@ public class Auto_click extends JFrame {
 	
 	    HWND FindWindow(String winClass, String title);
 	    int SW_SHOW = 1;
+	    int GetWindowRect(HWND handle, int[] rect);
 	}
+
+
 }
 
