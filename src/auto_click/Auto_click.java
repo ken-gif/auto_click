@@ -23,6 +23,7 @@ public class Auto_click extends JFrame {
 	private Thread t1=null;
 	private User32 dicProcess=null;
 	private DefaultListModel<String> lisModel;
+	private JList<String> lisLog;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -48,15 +49,19 @@ public class Auto_click extends JFrame {
 	                		if (!doing) {
 	                			continue;
 	                		}
-	                		lisModel.add(0, java.time.LocalTime.now()+ " setFore 有道单词本...");
+	                		Robot robot = new Robot();
+	                		lisModel.add(0, java.time.LocalTime.now()+ " setFore 有道单词本 and keydown...");
+	                		
 	                	    HWND hWnd = dicProcess.FindWindow(null, "有道单词本"); 
 	            	        dicProcess.ShowWindow(hWnd, User32.SW_SHOW);  
 	            	        dicProcess.SetForegroundWindow(hWnd);  
-	            	        lisModel.add(0, java.time.LocalTime.now()+" keydown...");
-	                		Robot robot = new Robot();
 							robot.keyPress(KeyEvent.VK_RIGHT);
 							robot.delay(100);
 							Thread.sleep(2000);
+							hWnd = dicProcess.FindWindow(null, "有道单词本"); 
+	            	        dicProcess.ShowWindow(hWnd, User32.SW_SHOW);  
+	            	        dicProcess.SetForegroundWindow(hWnd);  
+	            	        
 							robot.keyPress(KeyEvent.VK_SPACE);
 							robot.delay(100);
 							System.out.println("Thread");
@@ -99,7 +104,7 @@ public class Auto_click extends JFrame {
 		});
 		contentPane.add(btnStart, BorderLayout.SOUTH);
 		lisModel = new DefaultListModel<String>();
-		JList<String> lisLog = new JList<String>(lisModel);
+		lisLog = new JList<String>(lisModel);
 		contentPane.add(lisLog, BorderLayout.CENTER);
 		
 	}
