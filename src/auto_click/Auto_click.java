@@ -53,7 +53,7 @@ public class Auto_click extends JFrame {
 	                	int[] rect = {0, 0, 0, 0};
 	                	
 	                	for(;;) {
-	                		Thread.sleep(4000);
+	                		Thread.sleep(6000);
 	                		if (!doing) {
 	                			continue;
 	                		}
