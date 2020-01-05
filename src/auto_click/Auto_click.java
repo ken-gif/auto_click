@@ -49,12 +49,16 @@ public class Auto_click extends JFrame {
 	                try {
 	                	Point p;
 	                	HWND hWnd;
-	                	int midXWin,midYWin;
+	                	int midXWin,midYWin, cardButX,cardButY;
 	                	int[] rect = {0, 0, 0, 0};
-	                	
+	                	Boolean startRun=true;
 	                	for(;;) {
-	                		Thread.sleep(6000);
-	                		if (!doing) {
+	                		if (startRun==false) {
+	                			Thread.sleep(6000);
+	                		}
+	                		if (doing==false) {
+	                			Thread.sleep(1000);
+	                			startRun=true;
 	                			continue;
 	                		}
 	                		Robot robot = new Robot();
@@ -66,27 +70,29 @@ public class Auto_click extends JFrame {
 	            	        p=MouseInfo.getPointerInfo().getLocation();
 	            	        System.out.println(p.x);
 	            	        System.out.println(p.y);
-	            	        
+	            	        System.out.println(startRun);
 							User32.instance.GetWindowRect(hWnd, rect);
+							if (startRun==true) {
+								cardButX=(int) (rect[2]*0.98);
+								cardButY=(int) (rect[1]*1.21);
+ 								robot.mouseMove(cardButX, cardButY);
+ 								robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+ 								robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+ 								startRun=false;
+							}
+							
 							midXWin=(rect[2]+rect[0])/2;
-							midYWin=(rect[3]+rect[1])/2;
+  							midYWin=(rect[3]+rect[1])/2;
 							robot.mouseMove(midXWin, midYWin);
+								
 							robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
 							robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 							robot.mouseMove(p.x, p.y);
 							robot.keyPress(KeyEvent.VK_RIGHT);
-							robot.keyPress(KeyEvent.VK_SPACE);
+  							robot.keyPress(KeyEvent.VK_SPACE);
 							System.out.println("0:"+rect[0]+",1:"+rect[1]+",2:"+rect[2]+",3:"+rect[3]);
 	            	        
-							//robot.delay(100);
-							//Thread.sleep(2000);
-							//hWnd = dicProcess.FindWindow(null, "有道单词本"); 
-	            	        //dicProcess.ShowWindow(hWnd, User32.SW_SHOW);  
-	            	        //dicProcess.SetForegroundWindow(hWnd);  
-							
-							//robot.delay(100);
-							System.out.println("Thread");
-	                	}
+ 	                	}
 	                } 
 	                catch(Exception e) { 
 	                    e.printStackTrace(); 
