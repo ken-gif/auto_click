@@ -69,8 +69,8 @@ public class Auto_click extends JFrame {
 
 							User32.instance.GetWindowRect(hWnd, rect);
 
-							cardButX=(int) (rect[2]*0.98);
-							cardButY=(int) (rect[1]*1.21);
+							cardButX=(int) (rect[2]-26);
+							cardButY=(int) (rect[1]+80);
 							robot.mouseMove(cardButX, cardButY);
 							robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
 							robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
